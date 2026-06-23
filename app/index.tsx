@@ -1,122 +1,123 @@
-import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from 'react';
 import {
-  BrandMark,
-  GlassCard,
-  PrimaryButton,
-  Screen,
-  sharedText,
-} from "../components/ShiftPayUI";
-import { theme } from "../lib/theme";
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { router } from 'expo-router';
+import { hasSeenWelcome, setWelcomeSeen } from '../lib/storage';
+import { ShiftPayLogo } from '../components/ShiftPayLogo';
 
 export default function WelcomeScreen() {
-  const router = useRouter();
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function checkWelcomeStatus() {
+      const seen = await hasSeenWelcome();
+
+      if (!mounted) return;
+
+      if (seen) {
+        router.replace('/(tabs)/calculator');
+      } else {
+        setChecking(false);
+      }
+    }
+
+    checkWelcomeStatus();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  async function handleStart() {
+    await setWelcomeSeen();
+    router.replace('/(tabs)/calculator');
+  }
+
+  if (checking) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4ade80" />
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <Screen contentContainerStyle={styles.content}>
-      <View style={styles.hero}>
-        <BrandMark size={78} />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.card}>
+        <ShiftPayLogo size={150} style={styles.logo} />
 
-        <Text style={styles.appName}>ShiftPay</Text>
-        <Text style={styles.tagline}>
-          Calculate your shift earnings quickly, clearly, and offline.
+        <Text style={styles.title}>Track your shift. Know your pay.</Text>
+
+        <Text style={styles.subtitle}>
+          A simple offline calculator for hourly workers to estimate earnings,
+          save shifts, and view history.
         </Text>
+
+        <TouchableOpacity activeOpacity={0.85} style={styles.button} onPress={handleStart}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </TouchableOpacity>
       </View>
-
-      <GlassCard style={styles.card}>
-        <Text style={styles.cardTitle}>Built for hourly workers</Text>
-
-        <View style={styles.featureRow}>
-          <Text style={styles.featureIcon}>✓</Text>
-          <Text style={sharedText.body}>
-            Calculate pay from hours, minutes, and breaks.
-          </Text>
-        </View>
-
-        <View style={styles.featureRow}>
-          <Text style={styles.featureIcon}>✓</Text>
-          <Text style={sharedText.body}>
-            Save shifts locally on your device.
-          </Text>
-        </View>
-
-        <View style={styles.featureRow}>
-          <Text style={styles.featureIcon}>✓</Text>
-          <Text style={sharedText.body}>
-            Track recent earnings and best shifts.
-          </Text>
-        </View>
-      </GlassCard>
-
-      <PrimaryButton
-        title="Start Calculating"
-        onPress={() => router.replace("/calculator")}
-        style={styles.primary}
-      />
-
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => router.push("/history")}
-        style={styles.linkButton}
-      >
-        <Text style={styles.linkText}>View saved shifts</Text>
-      </TouchableOpacity>
-    </Screen>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  content: {
-    flexGrow: 1,
-    justifyContent: "center",
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#101820',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  hero: {
-    alignItems: "center",
-    marginBottom: 28,
-  },
-  appName: {
-    color: theme.colors.text,
-    fontSize: 46,
-    fontWeight: "900",
-    letterSpacing: -1.5,
-    marginTop: 18,
-  },
-  tagline: {
-    color: theme.colors.muted,
-    textAlign: "center",
-    fontSize: 16,
-    lineHeight: 23,
-    marginTop: 8,
-    maxWidth: 310,
+  container: {
+    flex: 1,
+    backgroundColor: '#101820',
+    justifyContent: 'center',
+    padding: 24,
   },
   card: {
-    marginBottom: 18,
+    backgroundColor: '#172430',
+    borderRadius: 28,
+    padding: 28,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
+    alignItems: 'center',
   },
-  cardTitle: {
-    color: theme.colors.text,
-    fontSize: 19,
-    fontWeight: "900",
-    marginBottom: 14,
+  logo: {
+    marginBottom: 22,
   },
-  featureRow: {
-    flexDirection: "row",
-    gap: 10,
-    marginTop: 10,
+  title: {
+    fontSize: 25,
+    fontWeight: '800',
+    color: '#ffffff',
+    marginBottom: 12,
+    textAlign: 'center',
   },
-  featureIcon: {
-    color: theme.colors.green,
-    fontWeight: "900",
-    marginTop: 1,
+  subtitle: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#b8c4ce',
+    marginBottom: 28,
+    textAlign: 'center',
   },
-  primary: {
-    marginTop: 6,
+  button: {
+    backgroundColor: '#4ade80',
+    paddingVertical: 16,
+    paddingHorizontal: 28,
+    borderRadius: 18,
+    alignItems: 'center',
+    width: '100%',
   },
-  linkButton: {
-    paddingVertical: 18,
-    alignItems: "center",
-  },
-  linkText: {
-    color: theme.colors.muted,
-    fontWeight: "700",
+  buttonText: {
+    color: '#07130c',
+    fontSize: 17,
+    fontWeight: '800',
   },
 });

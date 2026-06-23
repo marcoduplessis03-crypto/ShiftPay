@@ -16,6 +16,7 @@ export type ShiftResult = ShiftDraft & {
 };
 
 const HISTORY_KEY = "@shiftpay_history_v1";
+const WELCOME_SEEN_KEY = "@shiftpay_welcome_seen";
 
 function safeNumber(value: number): number {
   return Number.isFinite(value) && value > 0 ? value : 0;
@@ -94,4 +95,29 @@ export async function deleteShift(id: string): Promise<ShiftResult[]> {
 
 export async function clearHistory(): Promise<void> {
   await AsyncStorage.removeItem(HISTORY_KEY);
+}
+
+export async function hasSeenWelcome(): Promise<boolean> {
+  try {
+    const value = await AsyncStorage.getItem(WELCOME_SEEN_KEY);
+    return value === "true";
+  } catch {
+    return false;
+  }
+}
+
+export async function setWelcomeSeen(): Promise<void> {
+  try {
+    await AsyncStorage.setItem(WELCOME_SEEN_KEY, "true");
+  } catch {
+    // Prevent onboarding storage errors from crashing the app
+  }
+}
+
+export async function resetWelcomeSeen(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(WELCOME_SEEN_KEY);
+  } catch {
+    // Prevent onboarding storage errors from crashing the app
+  }
 }

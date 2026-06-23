@@ -1,23 +1,24 @@
 {
   "expo": {
-    "name": "ShiftPay Calculator",
-    "slug": "shiftpay-calculator",
-    "version": "1.0.0",
+    "name": "ShiftPay",
+    "slug": "shiftpay",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "scheme": "shiftpaycalc",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.marcoduplessis.shiftpaycalculator"
+    "icon": "./assets/images/icon.png",
+    "scheme": "shiftpay",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#101820"
     },
     "android": {
-      "package": "com.marcoduplessis.shiftpaycalculator",
+      "package": "com.marcoduplessis.shiftpay",
+      "versionCode": 3,
       "adaptiveIcon": {
-        "backgroundColor": "#08111F"
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#101820"
       }
-    },
-    "plugins": ["expo-router"]
+    }
   }
 }

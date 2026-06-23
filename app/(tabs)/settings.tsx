@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import {
   BrandMark,
@@ -9,7 +10,7 @@ import {
   SecondaryButton,
   sharedText,
 } from "../../components/ShiftPayUI";
-import { clearHistory } from "../../lib/storage";
+import { clearHistory, resetWelcomeSeen } from "../../lib/storage";
 import {
   CURRENCIES,
   CurrencyCode,
@@ -125,7 +126,13 @@ export default function SettingsScreen() {
         </Text>
       </GlassCard>
 
-<SecondaryButton title="Show Welcome Screen" onPress={() => router.push("/")} />
+<SecondaryButton
+  title="Return to Welcome Screen"
+  onPress={async () => {
+    await resetWelcomeSeen();
+    router.replace("/");
+  }}
+/>
 
       <View style={styles.dangerZone}>
         <Text style={styles.dangerTitle}>Danger zone</Text>

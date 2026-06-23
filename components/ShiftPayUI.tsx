@@ -1,16 +1,15 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import {
   ScrollView,
-  StyleProp,
   StyleSheet,
   Text,
   TextInput,
-  TextStyle,
   TouchableOpacity,
   View,
-  ViewStyle,
 } from "react-native";
+import type { StyleProp, TextStyle, ViewStyle } from "react-native";
 import { theme } from "../lib/theme";
+import { ShiftPayLogo } from "./ShiftPayLogo";
 
 type ScreenProps = {
   children: ReactNode;
@@ -21,6 +20,7 @@ export function Screen({ children, contentContainerStyle }: ScreenProps) {
   return (
     <View style={styles.root}>
       <BackgroundEffects />
+
       <ScrollView
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -55,7 +55,7 @@ export function BrandMark({ size = 48 }: { size?: number }) {
         },
       ]}
     >
-      <Text style={[styles.brandText, { fontSize: size * 0.36 }]}>SP</Text>
+      <ShiftPayLogo size={size * 0.86} />
     </View>
   );
 }
@@ -167,6 +167,7 @@ export function NumberField({
   return (
     <View style={[styles.field, style]}>
       <Text style={styles.fieldLabel}>{label}</Text>
+
       <TextInput
         value={value}
         onChangeText={handleChange}
@@ -285,11 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(34,197,94,0.16)",
     borderWidth: 1,
     borderColor: "rgba(34,197,94,0.35)",
-  },
-  brandText: {
-    color: theme.colors.green,
-    fontWeight: "900",
-    letterSpacing: -1,
+    overflow: "hidden",
   },
   card: {
     backgroundColor: theme.colors.surface,
