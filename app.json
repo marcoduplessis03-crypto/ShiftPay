@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "ShiftPay Calculator",
+    "slug": "shiftpay-calculator",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "shiftpaycalc",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.marcoduplessis.shiftpaycalculator"
+    },
+    "android": {
+      "package": "com.marcoduplessis.shiftpaycalculator",
+      "adaptiveIcon": {
+        "backgroundColor": "#08111F"
+      }
+    },
+    "plugins": ["expo-router"]
+  }
+}
